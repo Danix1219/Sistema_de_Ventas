@@ -1,0 +1,297 @@
+﻿<Page x:Class="Sistema_de_Ventas.Views.Ventas.Ventas_Screen"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
+      Background="#F8F9FA"
+      FontFamily="Segoe UI"
+      Foreground="#222"
+      d:DesignHeight="700" d:DesignWidth="1100"
+      Title="Ventas_Screen">
+
+    <Page.Resources>
+        <!-- Sombra reutilizable -->
+        <DropShadowEffect x:Key="AppDropShadow"
+                          Color="Black"
+                          BlurRadius="12"
+                          ShadowDepth="3"
+                          Opacity="0.12"/>
+
+        <!-- Degradado de azul para los headers -->
+        <LinearGradientBrush x:Key="BlueGradientBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FF007BFF" Offset="0"/>
+            <GradientStop Color="#FF0D519B" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- Botón moderno (pill) -->
+        <Style x:Key="ModernButtonStyle" TargetType="Button">
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="6" ShadowDepth="1.5" Opacity="0.06"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <!-- Border controla el CornerRadius -->
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="18"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.92"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" Value="0.8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Botón circular para íconos -->
+        <Style x:Key="CircleIconButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="44"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="22"
+                                Padding="0"
+                                Effect="{StaticResource AppDropShadow}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.9"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Opacity" Value="0.8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Estilo de encabezados del DataGrid -->
+        <Style x:Key="DataGridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{StaticResource BlueGradientBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="40"/>
+        </Style>
+
+        <!-- Estilo de fila del DataGrid -->
+        <Style x:Key="DataGridRowStyle" TargetType="DataGridRow">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFF7F7"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Estilo para el panel de detalles -->
+        <Style x:Key="DetailsPanelStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="Effect" Value="{StaticResource AppDropShadow}"/>
+            <Setter Property="Margin" Value="0,12,0,0"/>
+        </Style>
+
+        <!-- Icono de perfil -->
+        <DrawingImage x:Key="ProfileIcon">
+            <DrawingImage.Drawing>
+                <GeometryDrawing>
+                    <GeometryDrawing.Geometry>
+                        <EllipseGeometry Center="12,12" RadiusX="10" RadiusY="10"/>
+                    </GeometryDrawing.Geometry>
+                    <GeometryDrawing.Brush>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="#FF007BFF" Offset="0"/>
+                            <GradientStop Color="#FF0D519B" Offset="1"/>
+                        </LinearGradientBrush>
+                    </GeometryDrawing.Brush>
+                    <GeometryDrawing.Pen>
+                        <Pen Brush="#FF0D519B" Thickness="1"/>
+                    </GeometryDrawing.Pen>
+                </GeometryDrawing>
+            </DrawingImage.Drawing>
+        </DrawingImage>
+
+        <!-- Estilo para el modal -->
+        <Style x:Key="ModalStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="24"/>
+            <Setter Property="Effect" Value="{StaticResource AppDropShadow}"/>
+            <Setter Property="Width" Value="400"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Estilo para campos de texto -->
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="Margin" Value="0,5,0,15"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#DDD"/>
+            <Setter Property="Background" Value="#FAFAFA"/>
+            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Estilo para etiquetas -->
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,10,0,5"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#555"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- CABECERA: Icono de perfil + título centrado -->
+        <Grid Grid.Row="0" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Icono de perfil a la izquierda -->
+            <Button Grid.Column="0" Style="{StaticResource CircleIconButtonStyle}" Background="Transparent" BorderBrush="#007BFF" BorderThickness="1" ToolTip="Perfil de usuario">
+                <Image Source="{StaticResource ProfileIcon}" Width="24" Height="24"/>
+            </Button>
+
+            <!-- Título centrado -->
+            <TextBlock Grid.Column="1" Text="VentaFácil" FontSize="22" FontWeight="Bold" Foreground="#333" 
+                       HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,44,0"/>
+
+            <!-- Botones de acción a la derecha -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button Style="{StaticResource CircleIconButtonStyle}" Background="#28a745" Foreground="White" ToolTip="Agregar artículo" Click="AgregarArticuloButton_Click">
+                    <TextBlock Text="+" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Button>
+
+                <Button Style="{StaticResource CircleIconButtonStyle}" Background="#0078D7" Foreground="White" ToolTip="Imprimir reporte">
+                    <TextBlock Text="🖨" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Button>
+
+                <Button Style="{StaticResource CircleIconButtonStyle}" Background="#6c757d" Foreground="White" ToolTip="Filtrar">
+                    <TextBlock Text="🔍" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <Border Grid.Row="1" Background="White" CornerRadius="12" Padding="18" Effect="{StaticResource AppDropShadow}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Sub-encabezado -->
+                <TextBlock Grid.Row="0" Text="Productos" FontSize="18" FontWeight="SemiBold" Foreground="#444" Margin="0,0,0,10"/>
+
+                <!-- DataGrid estilizado -->
+                <DataGrid x:Name="ProductosDataGrid"
+                          Grid.Row="1"
+                          AutoGenerateColumns="False"
+                          HeadersVisibility="Column"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          CanUserResizeRows="False"
+                          SelectionMode="Single"
+                          IsReadOnly="True"
+                          GridLinesVisibility="None"
+                          BorderThickness="0"
+                          RowHeight="44"
+                          Background="White"
+                          Foreground="#222"
+                          FontSize="13"
+                          ColumnHeaderStyle="{StaticResource DataGridHeaderStyle}"
+                          RowStyle="{StaticResource DataGridRowStyle}">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="2*"/>
+                        <DataGridTextColumn Header="Código de barras" Binding="{Binding CodigoBarras}" Width="2*"/>
+                        <DataGridTextColumn Header="Precio Unitario" Binding="{Binding PrecioUnitario}" Width="*"/>
+                        <DataGridTextColumn Header="Stock" Binding="{Binding Stock}" Width="*"/>
+                        <DataGridTextColumn Header="Saldo" Binding="{Binding Saldo}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <!-- MODAL PARA AGREGAR ARTÍCULO (inicialmente colapsado) -->
+        <Grid x:Name="ModalOverlay" Grid.RowSpan="2" Background="#80000000" Visibility="Collapsed" Panel.ZIndex="999">
+            <Border Style="{StaticResource ModalStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Encabezado del modal -->
+                    <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0,0,0,20">
+                        <TextBlock Text="Agregar Artículo" FontSize="18" FontWeight="Bold" Foreground="#333"/>
+                        <TextBlock Text="VentaFácil" FontSize="14" Foreground="#666" Margin="0,5,0,0"/>
+                    </StackPanel>
+
+                    <!-- Campos del formulario -->
+                    <StackPanel Grid.Row="1" Orientation="Vertical">
+                        <TextBlock Text="Nombre de Artículo:" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"/>
+
+                        <TextBlock Text="Código de Barras:" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"/>
+
+                        <TextBlock Text="Stock:" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"/>
+
+                        <TextBlock Text="Precio Unit:" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"/>
+
+                        <TextBlock Text="Saldo:" Style="{StaticResource LabelStyle}"/>
+                        <TextBox Style="{StaticResource TextBoxStyle}"/>
+                    </StackPanel>
+
+                    <!-- Botones de acción -->
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Cancelar" Style="{StaticResource ModernButtonStyle}" Background="#6c757d" Foreground="White" Click="CancelarModalButton_Click"/>
+                        <Button Content="Agregar" Style="{StaticResource ModernButtonStyle}" Background="#28a745" Foreground="White"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Page>
